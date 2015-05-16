@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <title>{% block title %}LCF的个人网站{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'forum/mainstyle.css' %}"/>
+</head>
+<body>
+<div id="container">
+    <div id="title">
+        <h1><a href="/">lcfcn.com</a></h1>
+    </div>
+    <div id="navi-bar">
+        <a href="{% url 'index' %}">首页|INDEX</a>
+        <a href="{% url 'forum-index' %}">讨论版|FORUM</a>
+        <a href="{% url 'nodetag-list' %}">节点|NODES</a>
+        <a href="{% url 'attachment-list' %}">附件|FILES</a>
+        {% if user.is_authenticated %}
+            <span id="current_id">ID: {{ user.username }} (<a href="{% url 'user-logout' %}">退出</a>)</span>
+        {% else %}
+            <a href="{% url 'user-login' %}">登录|LOGIN</a>
+        {% endif %} 
+    </div>
+    {% block container %}
+
+    {% endblock %}
+    <div id="footer"><a href="http://lcfcn.com/forum/thread/3/">☎ ABOUT PAGE, CONTACTS & COPYRIGHT STATEMENT ☎</a></div>
+</div>
+</body>
+</html>

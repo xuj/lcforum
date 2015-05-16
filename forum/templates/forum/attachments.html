@@ -1,0 +1,47 @@
+{% extends 'forum/base.html' %}
+{% block title %}附件库-LCF的个人网站{% endblock %}
+{% block container %}
+    <div class="guide-bar">
+        <a href="/">首页</a>
+        »
+        <a href="{% url 'attachment-list' %}">附件库</a>
+        »
+        <b>附件列表</b>
+        <span><a href="{% url 'upload-view' %}">✍上传文件</a></span>
+    </div>
+    {% for object in object_list %}
+        {% if object.file_exists %}
+            <div class="file-item">
+                <div class="file-item-icon {{ object.is_image|yesno:'file-item-icon-img,file-item-icon-file' }}"></div>
+                <div class="file-item-description">
+                    <div class="file-item-description-line">
+                        <span class="file-item-description-l">文件名:</span>
+                        <span class="file-item-description-r">{{ object.filename }}
+                        ({{ object.attachment.size|filesizeformat }})
+                        </span>
+                    </div>
+                    <div class="file-item-description-line">
+                        <span class="file-item-description-l">站内地址:</span>
+                        <span class="file-item-description-r"><input type="text" value="{{ object.attachment.url }}"/></span>
+                    </div>
+                    <div class="file-item-description-line">
+                        <span class="file-item-description-l">备注:</span>
+                        <span class="file-item-description-r">{{ object.remark|default:"(无备注)" }}</span>
+                    </div>
+                </div>
+                <div class="file-item-go">
+                    <a href="{% url 'attachment-detail' pk=object.pk %}">查看详情</a>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <div id="page-navi">
+        <a href="{% url 'attachment-list' %}">第一页</a>
+        «
+        {% if page_obj.has_previous %}<a href="{% url 'attachment-list' %}?p={{ page_obj.previous_page_number }}">上一页</a>{% endif %}
+        <span>{{ page_obj.number }}/{{ paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a href="{% url 'attachment-list' %}?p={{ page_obj.next_page_number }}">下一页</a>{% endif %}
+        »
+        <a href="{% url 'attachment-list' %}?p=last">最后一页</a>
+    </div>
+{% endblock %}

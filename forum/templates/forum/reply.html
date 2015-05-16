@@ -1,0 +1,18 @@
+{% extends 'forum/base.html' %}
+{% block title %}发表回复-LCF的个人网站{% endblock %}
+{% block container %}
+    <div class="guide-bar">
+        <a href="/">首页</a>
+        »
+        <b>{{ post_node.node.name }}</b>
+        »
+        回复主题：{{ post_node.title|truncatechars:25 }}
+
+        <a href="{% url 'post-detail' pk=post_node.pk %}" class="float-right">➥返回主题</a>
+    </div>
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+        <input type="submit" value="发表回复" />
+    </form>
+{% endblock %}

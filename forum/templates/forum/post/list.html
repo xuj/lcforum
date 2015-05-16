@@ -1,0 +1,40 @@
+{% extends "forum/base.html" %}
+{% load i18n %}
+{% block title %}讨论版-LCF的个人网站{% endblock %}
+    {% block container %}
+        <div class="guide-bar">
+            <a href="/">首页</a>
+            »
+            <a href="{% url 'forum-index' %}">讨论版</a>
+            »
+            <b>所有内容</b>
+            <span><a href="{% url 'nodetag-list' %}">✍发表内容(选择节点)</a></span>
+        </div>
+        <div id="thread-list">
+            {% for thread in post_list %}
+            <div class="thread-item">
+                <span class="thread-author">{{ thread.author.username|default:"游客" }}</span>
+                ▸
+                <span class="thread-created">{% language 'en' %}{{ thread.created|date:"M d, Y" }}{% endlanguage %}</span>
+                ▸
+                <span class="thread-title">
+                    [<a href="{% url 'nodetag-detail' slug=thread.node.slug %}">{{ thread.node.name|default:"-" }}</a>]
+                    <a href="{% url 'post-detail' pk=thread.pk %}">{{ thread.title }}</a>
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+        <div id="page-navi">
+            <a href="{% url 'forum-index' %}">第一页</a>
+            «
+            {% if page_obj.has_previous %}
+                <a href="{% url 'forum-index' %}?p={{ page_obj.previous_page_number }}">上一页</a>
+            {% endif %}
+            <span>{{ page_obj.number }}/{{ paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="{% url 'forum-index' %}?p={{ page_obj.next_page_number }}">下一页</a>
+            {% endif %}
+            »
+            <a href="{% url 'forum-index' %}?p=last">最后一页</a>
+        </div>
+    {% endblock %}

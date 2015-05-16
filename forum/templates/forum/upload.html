@@ -1,0 +1,25 @@
+{% extends 'forum/base.html' %}
+{% block title %}上传文件-LCF的个人网站{% endblock %}
+{% block container %}
+    <div class="guide-bar">
+        <a href="/">首页</a>
+        »
+        <a href="{% url 'attachment-list' %}">附件库</a>
+        »
+        <b>文件上传</b>
+    </div>
+    <div id="upload-form">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+        <legend>上传文件</legend>
+            {% if user.is_superuser %}
+                {{ form.as_p }}
+                <input type="submit" value="上传文件" />
+            {% else %}
+                文件上传功能仅向管理员开放
+            {% endif %}
+        </fieldset>
+    </form>
+    </div>
+{% endblock %}

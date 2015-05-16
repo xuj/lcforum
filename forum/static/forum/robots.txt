@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /upload/
+Disallow: /admin/
+Disallow: /forum/node/*/post/$
+Disallow: /forum/thread/*/reply/$
+Sitemap: http://lcfcn.com/sitemap.xml
