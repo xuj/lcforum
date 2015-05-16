@@ -1,0 +1,58 @@
+{% extends 'forum/base.html' %}
+{% load staticfiles %}
+{% load truncate_by_width %}
+{% block title %}首页-LCF的个人网站{% endblock %}
+{% block container %}
+    <div class="index-row">
+        <div id="recommended">
+            <div class="index-column-title" style="margin-bottom: 0">站长发布(<a href="/rss/">RSS</a>)</div>
+            <h3 style="background-color: #fbfaf2; margin: 0; padding: 0.3em; border-bottom: 1px solid #efeacc">
+                <a href="{% url 'post-detail' pk=headline.pk|default:1 %}">
+                    [{{ headline.node }}]
+                    {{ headline.title|truncatechars:60 }}
+                </a>
+            </h3>
+            <ul id="index-recommend-post">
+                {% for post in admin_post_latest %}
+                    <li>
+                        [{{ post.node }}]
+                        <a href="{% url 'post-detail' pk=post.pk|default:1 %}">{{ post.title|truncate_by_width:45 }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="intro">
+            <div class="index-column-title">About Me</div>
+            <img src="{% static 'forum/avatar.gif' %}" alt="Photo of lcf" style="float: left; margin-right: 10px; width: 100px; height: 117px;"/>
+            <p>我叫lcf，这是我的个人网站。</p>
+            <p>网站的内容是基于<a href="{% url 'nodetag-list' %}">[节点]</a>分类的。</p>
+            <p>我使用Python/Django，但是很业余，欢迎讨论关于它们的话题。</p>
+            <p>网站源码托管在GitHub: <br/><a href="https://github.com/lichifeng/lcforum">https://github.com/lichifeng/</a></p>
+        </div>
+    </div>
+    <div class="index-row">
+        <div id="latest-blog">
+            <div class="index-column-title">讨论版新贴</div>
+            <ul>
+                {% for blog in post_latest %}
+                    <li>[<a href="{% url 'nodetag-detail' slug=blog.node.slug %}">{{ blog.node.name }}</a>]
+                        <a href="{% url 'post-detail' pk=blog.pk|default:1 %}">{{ blog.title|truncate_by_width:32 }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="latest-post">
+            <div class="index-column-title">最近回复</div>
+            <ul>
+                {% for reply in reply_latest %}
+                    <li>
+                        <a href="{% url 'post-detail' pk=reply.post_node.pk|default:1 %}">
+                            {{ reply.content_md|striptags|default:"(该回复无内容)"|truncate_by_width:42 }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+{% endblock %}

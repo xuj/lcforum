@@ -1,0 +1,18 @@
+{% extends 'forum/base.html' %}
+{% block title %}发表新内容-LCF的个人网站{% endblock %}
+{% block container %}
+    <div class="guide-bar">
+        <a href="/">首页</a>
+        »
+        <b>{{ node.name }}</b>
+        »
+        发表新内容
+
+        <a href="{% url 'nodetag-detail' slug=node.slug %}" class="float-right">➥返回<b>{{ node.name }}</b>节点</a>
+    </div>
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+        <input type="submit" value="发表文章" />
+    </form>
+{% endblock %}

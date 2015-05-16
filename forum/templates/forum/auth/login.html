@@ -1,0 +1,20 @@
+{% extends 'forum/base.html' %}
+{% block title %}用户登录-LCF的个人网站{% endblock %}
+{% block container %}
+    <div class="guide-bar">
+        <a href="/">首页</a>
+        »
+        <b>用户登录</b>
+    </div>
+    {% if user.is_authenticated %}
+    <ul class="errorlist">
+        <li>你已经以 <b>{{ user.username }}</b> 登录，重复登录会退出当前用户。</li>
+    </ul>
+    {% endif %}
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+        <input type="submit" value="登录" />
+        <a href="{% url 'user-reg' %}">注册新用户</a>
+    </form>
+{% endblock %}

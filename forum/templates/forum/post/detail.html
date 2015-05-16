@@ -1,0 +1,82 @@
+{% extends "forum/base.html" %}
+{% load forum_strip_email %}
+{% block title %}{{ post.title }}{% endblock %}
+    {% block container %}
+    <div itemscope itemtype="http://schema.org/Article">
+        <div id="thread-head">
+            <div id="thread-head-l">
+                <div id="thread-head-t">
+                    ✎
+                    <span itemprop="headline">{{ post.title }}</span>
+                </div>
+                <div id="thread-head-b">
+                    由
+                    {% if post.author.is_superuser %}
+                        <b itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ post.author.username }}</span></b>
+                        {% if post.author.is_superuser %}<em class="adminlogo"></em>{% endif %}
+                    {% elif post.author %}
+                        <span itemprop="author">{{ post.author.username }}</span><{{ post.author.email|default:"-"|strip_email_at }}>
+                    {% else %}
+                        游客:
+                        <span itemprop="author">{{ post.guest_name }}</span><{{ post.guest_email|default:"-"|strip_email_at }}>
+                    {% endif %}
+                    发布于
+                    <span itemprop="dateCreated">{{ post.created|date:"Y/m/d G:i" }}</span>
+                </div>
+            </div>
+            <div id="thread-head-r">
+                <a href="{% url 'nodetag-detail' slug=post.node.slug %}">➥返回<b itemprop="articleSection">{{ post.node.name }}</b>节点</a>
+            </div>
+        </div>
+        <div id="thread-body" class="markdown" itemprop="articleBody">
+            {{ post.content_md|safe|default:"<i>正文无内容</i>" }}
+        </div>
+        <div class="post-operate">
+            <a href="{% url 'post-reply' pk=post.pk %}">发表回复</a>
+        </div>
+        <div id="thread-reply">
+            {% for reply in object_list %}
+                <div itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+                <div class="thread-reply-head">
+                    {# I got inspired from: http://stackoverflow.com/a/6285428 #}
+                    <i>#{{ page_obj.start_index|add:forloop.counter0 }}</i>
+                    {% if reply.author.is_superuser %}
+                        <b>{{ reply.author.username }}</b>
+                        {% if reply.author.is_superuser %}<em class="adminlogo"></em>{% endif %}
+                    {% elif reply.author %}
+                        {{ reply.author.username }}&lt;{{ reply.author.email|default:"-"|strip_email_at }}&gt;
+                    {% else %}
+                        游客:
+                        {{ reply.guest_name }}&lt;{{ reply.guest_email|default:"-"|strip_email_at }}&gt;
+                    {% endif %} 
+
+                    在
+                    <span itemprop="commentTime">{{ reply.created|date:"Y/m/d G:i" }}</span>
+                    回复:
+                </div>
+                <div class="thread-reply-body markdown" itemprop="commentText">
+                    {{ reply.content_md|default:"(该回复无内容)"|safe }}
+                </div>
+                <div class="post-operate">
+                    <a href="{% url 'post-reply-cited' pk=post.pk reply_pk=reply.pk %}">引用并回复</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if paginator.num_pages > 1 %}
+            <div id="page-navi">
+                <a href="{% url 'post-detail' pk=post.pk %}">第一页</a>
+                «
+                {% if page_obj.has_previous %}
+                    <a href="{% url 'post-detail' pk=post.pk %}?p={{ page_obj.previous_page_number }}">上一页</a>
+                {% endif %}
+                <span>{{ page_obj.number }}/{{ paginator.num_pages }}</span>
+                {% if page_obj.has_next %}
+                    <a href="{% url 'post-detail' pk=post.pk %}?p={{ page_obj.next_page_number }}">下一页</a>
+                {% endif %}
+                »
+                <a href="{% url 'post-detail' pk=post.pk %}?p=last">最后一页</a>
+            </div>
+        {% endif %}
+    </div>
+    {% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'forum/base.html' %}
+{% block title %}查看{{ object.is_image|yesno:"图片,文件" }}-LCF的个人网站{% endblock %}
+{% block container %}
+    <div class="guide-bar">
+        <a href="/">首页</a>
+        »
+        <a href="{% url 'attachment-list' %}">附件库</a>
+        »
+        <b>查看{{ object.is_image|yesno:"图片,文件" }}</b>
+    </div>
+    {% if object.file_exists %}
+        {% if object.is_image %}
+            <div id="img_preview">
+                <img src="{{ object.attachment.url }}" alt=""/>
+            </div>
+        {% else %}
+            <div id="download-pic">
+                <a href="{{ object.attachment.url }}"></a>
+            </div>
+        {% endif %}
+        <ul id="file-info">
+            <li><span class="file-info-l">文件名:</span><span class="file-info-r">{{ object.filename }}</span></li>
+            <li>
+                <span class="file-info-l">备注:</span>
+                <span class="file-info-r">{{ object.remark|default:"(无备注)" }}</span>
+            </li>
+            <li><span class="file-info-l">文件大小:</span><span class="file-info-r">
+                {{ object.attachment.size|filesizeformat }}
+                {% if object.is_image %}
+                ({{ object.width }}px * {{ object.height }}px - {{ object.image_format }})
+                {% endif %}
+            </span></li>
+            <li><span class="file-info-l">上传人:</span><span class="file-info-r">
+                {{ object.user|default:"Guest" }}</span></li>
+            <li><span class="file-info-l">上传时间:</span><span class="file-info-r">
+                {{ object.created|date:"Y/m/d G:i" }}
+            </span></li>
+            <li><span class="file-info-l">站内地址:</span><span class="file-info-r">
+                <input type="text" value="{{ object.attachment.url }}"/>
+            </span></li>
+        </ul>
+    {% else %}
+        文件不存在，可能已被删除或路径失效！
+    {% endif %}
+{% endblock %}
