@@ -32,7 +32,6 @@ ALLOWED_HOSTS = [
     '.lcfcn.com.'
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = (

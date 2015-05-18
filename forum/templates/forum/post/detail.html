@@ -44,10 +44,10 @@
                         <b>{{ reply.author.username }}</b>
                         {% if reply.author.is_superuser %}<em class="adminlogo"></em>{% endif %}
                     {% elif reply.author %}
-                        {{ reply.author.username }}&lt;{{ reply.author.email|default:"-"|strip_email_at }}&gt;
+                        {{ reply.author.username }}
                     {% else %}
                         游客:
-                        {{ reply.guest_name }}&lt;{{ reply.guest_email|default:"-"|strip_email_at }}&gt;
+                        {{ reply.guest_name }}
                     {% endif %} 
 
                     在
