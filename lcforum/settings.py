@@ -25,8 +25,6 @@ SECRET_KEY = '+2l%2v75%#^x-vy!35(eokil(!xx**pbzxx@*(4c1o6x&6p9rr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -72,7 +70,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'zh-cn'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -85,9 +83,24 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': os.path.join(BASE_DIR, 'templates'),
+        'OPTIONS': {
+            'context_processors': (
+                                      "django.contrib.auth.context_processors.auth",
+                                      "django.template.context_processors.debug",
+                                      "django.template.context_processors.media",
+                                      "django.template.context_processors.static",
+                                      "django.template.context_processors.tz",
+                                      "django.contrib.messages.context_processors.messages"
+                                  ),
+            'debug': True,
+        }
+    },
+]
 
 CACHES = {
     'default': {

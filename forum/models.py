@@ -49,7 +49,7 @@ class PostBase(DateTimeBase):
             'invalid': "您输入了一个无效的邮件地址，请修改或留空"
         }
     )
-    ip_addr = models.IPAddressField(default='0.0.0.0', verbose_name="IP地址", help_text="发信人的IP地址")
+    ip_addr = models.GenericIPAddressField(default='0.0.0.0', verbose_name="IP地址", help_text="发信人的IP地址")
 
     need_notification = models.BooleanField(blank=True, default=True,
                                             help_text="☞被回复时用邮件通知我（需要填写有效的邮箱地址）",
