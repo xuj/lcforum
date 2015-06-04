@@ -7,7 +7,6 @@ from django.core.urlresolvers import reverse
 from django.core import validators
 from django.conf import settings
 from django.core.mail import send_mass_mail
-from django.contrib.sitemaps import ping_google
 import markdown
 from .utility import get_file_path
 from PIL import Image
@@ -123,7 +122,7 @@ class Post(PostBase):
 
 class Reply(PostBase):
     post_node = models.ForeignKey(Post, null=True, related_name='replies', on_delete=models.SET_NULL)
-    reply_to = models.ForeignKey('self', null=True, related_name='replies', on_delete=models.SET_NULL)
+    reply_to = models.ForeignKey('self', blank=True, null=True, related_name='replies', on_delete=models.SET_NULL)
 
     def get_absolute_url(self):
         if getattr(self.post_node, 'pk', None):
